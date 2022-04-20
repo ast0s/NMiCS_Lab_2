@@ -11,14 +11,13 @@ namespace NMiCS_Lab_2
         List<double> previousArguments = new List<double>();
         double epsilon;
 
-        public ZeidelMethod(double[,] normalizedMatrixA, double[] normalizedMatrixB, List<double> argumentsX, double epsilon)
+        public ZeidelMethod(double[,] matrixA, double[] matrixB, List<double> argumentsX, double epsilon)
         {
-            matrixA = normalizedMatrixA;
-            matrixB = normalizedMatrixB;
+            this.matrixA = matrixA;
+            this.matrixB = matrixB;
             currentArguments = argumentsX;
-            this.epsilon = epsilon;
-
             previousArguments.AddRange(currentArguments);
+            this.epsilon = epsilon;
         }
 
         public List<double> DoZeidelMethod()
@@ -26,11 +25,14 @@ namespace NMiCS_Lab_2
             for (int i = 0; i < currentArguments.Count; i++)
                 FindX(i);
 
+            if (Math.Abs(previousArguments[0] - currentArguments[0]) > 1000)
+                return null;
+
             for (int i = 0; i < currentArguments.Count; i++)
             {
                 if (Math.Abs(previousArguments[i] - currentArguments[i]) > epsilon)
                 {
-                    previousArguments.Clear();
+                    previousArguments.Clear();  
                     previousArguments.AddRange(currentArguments);
                     return DoZeidelMethod();
                 }

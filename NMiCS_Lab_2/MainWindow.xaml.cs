@@ -74,15 +74,26 @@ namespace NMiCS_Lab_2
                 GetMatrixA();
                 GetMatrixB();
 
-                GetTransposedMatrixA();
-                GetNormalizedMatrixA();
-                GetNormalizedMatrixB();
-
-                ZeidelMethod rm = new ZeidelMethod(normalizedMatrixA, normalizedMatrixB, argumentsX, epsilon);
-                argumentsX = rm.DoZeidelMethod();
+                ZeidelMethod zm = new ZeidelMethod(matrixA, matrixB, argumentsX, epsilon);
+                argumentsX = zm.DoZeidelMethod();
 
                 if (argumentsX == null)
-                    ResultField.Text = "Something went wrong!";
+                {
+                    argumentsX = new List<double>();
+                    GetArgumentsX();
+                    GetTransposedMatrixA();
+                    GetNormalizedMatrixA();
+                    GetNormalizedMatrixB();
+
+                    zm = new ZeidelMethod(normalizedMatrixA, normalizedMatrixB, argumentsX, epsilon);
+                    argumentsX = zm.DoZeidelMethod();
+
+                    if (argumentsX == null)
+                        ResultField.Text = "Something went wrong!";
+                    else
+                        for (int i = 0; i < argumentsX.Count; i++)
+                            ResultField.Text += $"x{i + 1} = " + argumentsX[i] + "\n";
+                }
                 else
                     for (int i = 0; i < argumentsX.Count; i++)
                         ResultField.Text += $"x{i + 1} = " + argumentsX[i] + "\n";
